@@ -42,7 +42,7 @@ exports.createTweetTable = function(connection, nconf) {
 			 	+ 'geo text, '
 			 	+ 'coordinates text, '
 			 	+ 'place text, '
-			 	+ 'place_name varchar(50), '
+			 	+ 'place_name text, '
 			 	+ 'country_code varchar(5), '
 			 	+ 'reply_tweet_id bigint , '
 			 	+ 'reply_tweet_id_str varchar(30), '
