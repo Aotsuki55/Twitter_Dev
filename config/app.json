@@ -1,0 +1,37 @@
+{
+  "driver": "mysql",
+
+  "mysql": {
+    "host": "localhost",
+    "user": "root",
+    "password": "xxxx",
+    "database": "Twitter_Dev"
+  },
+
+  "postgre": {
+    "host": "localhost",
+    "user": "root",
+    "password": "xxxx",
+    "database": "twitter_dev",
+    "port": "5432"
+  },
+
+  "sqlite": {
+    "path": "./Twitter_Dev.sqlite"
+  },
+
+  "mongo": {
+    "host": "localhost",
+    "port": "27017",
+    "database": "Twitter_Dev"
+  },
+  
+  "twitter": {
+    "consumer_key": "xxxxxxxx",
+    "consumer_secret": "xxxxxxxx",
+    "access_token_key": "xxxxxxxx",
+    "access_token_secret": "xxxxxxxx"
+  },
+
+  "create_table": true
+}
