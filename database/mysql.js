@@ -27,7 +27,7 @@ exports.createTweetTable = function(connection, nconf) {
 		 		+ 'tweet_id_str varchar(30), '
 		 		+ 'user_id bigint , '
 			 	+ 'user_id_str varchar(30), '
-			 	+ 'user_name varchar(25) character set utf8mb4 , '
+			 	+ 'user_name varchar(52) character set utf8mb4 , '
 			 	+ 'user_screen_name varchar(16) character set utf8mb4 , '
 			 	+ 'content text character set utf8mb4 , '
 			 	+ 'created_at datetime, '
@@ -54,7 +54,8 @@ exports.createTweetTable = function(connection, nconf) {
 			 	+ 'is_retweeted boolean, '
 			 	+ 'is_favorited boolean, '
 			 	+ 'is_sensitive boolean, '
-			 	+ 'lang varchar(10)'
+				+ 'lang varchar(10), '
+				+ 'is_downloaded boolean'
 			 	+ ') default charset=utf8mb4;';
 	connection.query(sql, function (error, results, fields) {
 		if(error) {
