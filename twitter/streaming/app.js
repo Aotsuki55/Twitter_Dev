@@ -19,11 +19,13 @@ nconf.load(function (err, conf) {
 			if(conf.create_table) {
 				dbModule.createTweetTable(connection, nconf);
 			}
-			streamingModule.getTweet(twitter, connection, conf.driver, null);
+			streamingModule.getTweet2(twitter, connection, conf.driver, null);
 		});
 	} else {
 		dbModule.connect(connection, function(db) {
 			streamingModule.getTweet(twitter, connection, conf.driver, db);
 		});
 	}
+	// var downloadModule = require('./download.js');
+	// downloadModule.downloadMedia(connection);
 });

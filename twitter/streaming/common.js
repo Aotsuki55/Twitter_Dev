@@ -13,6 +13,62 @@ exports.getTweet = function(twitter, connection, driver, db) {
 	});
 }
 
+exports.getTweet2 = function(twitter, connection, driver, db) {
+	var databaseClientModule = require('./' + driver + '.js');
+	let since_id_str = "";
+	let new_since_id;
+	let new_since_id_str = "";
+	let new_Date;
+	connection.query(
+		'SELECT * FROM `updateId`',
+		function (error, results, fields) {
+			if(error) console.log(error);
+			else since_id_str=results[0].newestId_str;
+			if(since_id_str=="")since_id_str=null;
+			const params = {since_id: since_id_str, count: 200};
+			twitter.get('statuses/home_timeline', params, function(error, tweets, response) {
+				// console.log(tweets);
+				if(error){
+					console.log(error);
+				}
+				else{
+					for(data in tweets) {
+						if(tweets[data].extended_entities) {
+							if(tweets[data].retweeted_status!=null){
+								databaseClientModule.saveTweet(formatTweet(tweets[data].retweeted_status), connection);
+							}
+							else{
+								databaseClientModule.saveTweet(formatTweet(tweets[data]), connection);
+							}
+						}
+						if(new_since_id_str.length<tweets[data].id_str.length||(new_since_id_str.length==tweets[data].id_str.length&&new_since_id_str<tweets[data].id_str)){
+							new_since_id = BigInt(tweets[data].id);
+							new_since_id_str = tweets[data].id_str;
+							new_Date = formatDate(tweets[data].created_at);
+						}
+					}
+					if(tweets.length!=0){
+						connection.query(
+							'update updateId set ?',
+							{
+								newestId: new_since_id,
+								newestId_str: new_since_id_str,
+								newestDate: new_Date,
+								updated_at: new_Date
+							},
+							function(error,results,fields) {
+								if(error) {
+									console.log(error);
+								} 
+							}
+						);
+					}
+				}
+			});
+		}
+	);
+}
+
 function formatTweet(data) {
 	data.createdAt = formatDate(data.created_at);
 
