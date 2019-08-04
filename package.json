@@ -9,6 +9,7 @@
     "twitter": "^1.6.0"
   },
   "dependencies": {
+    "bluebird": "^3.5.5",
     "request": "^2.88.0"
   }
 }
