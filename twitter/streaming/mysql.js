@@ -109,6 +109,7 @@ function saveMedia(data, connection) {
 			}
 		);
 	}
+	global.endFlag = 1;
 }
 
 exports.saveDate = function(data, connection) {

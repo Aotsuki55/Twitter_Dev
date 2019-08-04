@@ -37,7 +37,7 @@ function getTimeline(twitter, connection, since_id_str, max_id_str = "", new_sin
 	console.log(max_id_str);
 	var databaseClientModule = require('./mysql.js');
 	let new_max_id_str = "";
-	let params = {count: 30};
+	let params = {count: 200};
 	if(since_id_str!="") params.since_id = since_id_str;
 	if(max_id_str!="") params.max_id = max_id_str;
 	twitter.get('statuses/home_timeline', params, function(error, tweets, response) {
