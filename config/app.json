@@ -33,5 +33,8 @@
     "access_token_secret": "xxxxxxxx"
   },
 
-  "create_table": true
+  "create_table": true,
+  "create_media_table": false,
+  "create_updateId_table": false,
+  "download_path": "/Users/miyajimamasahiro/Desktop/twitter"
 }
