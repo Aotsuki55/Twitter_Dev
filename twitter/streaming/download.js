@@ -99,7 +99,10 @@ exports.downloadMedia = function(connection) {
 								);
 							});
 						}).then(function() {
-							if(global.endFlag) process.exit(0);
+							if(global.endFlag){
+								console.log("Download successfully!!!");
+								process.exit(0);
+							}
 							resolved();
 						});
 					});

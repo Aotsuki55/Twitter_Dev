@@ -19,6 +19,7 @@ nconf.load(function (err, conf) {
 	dbModule.connect(connection, function() {
 		if(conf.create_table) dbModule.createTweetTable(connection, nconf);
 		if(conf.create_media_table) dbModule.createMediaTable(connection, nconf);
+		if(conf.create_updateId_table) dbModule.createUpdateIdTable(connection, nconf);
 		streamingModule.getTweet2(twitter, connection, "mysql", null).then(function(){
 			
 			var downloadModule = require('./download.js');

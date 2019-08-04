@@ -114,3 +114,25 @@ exports.createMediaTable = function(connection, nconf) {
 		}
 	});
 }
+
+exports.createUpdateIdTable = function(connection, nconf) {
+	var sql = 'CREATE TABLE `updateId` ('
+		+ '`oldestId` bigint(20) DEFAULT NULL,'
+		+ '`oldestId_str` varchar(30) DEFAULT NULL,'
+		+ '`newestId` bigint(20) DEFAULT NULL,'
+		+ '`newestId_str` varchar(30) DEFAULT NULL,'
+		+ '`oldestDate` datetime DEFAULT NULL,'
+		+ '`newestDate` datetime DEFAULT NULL,'
+		+ '`updated_at` datetime DEFAULT NULL'
+		+ ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;';
+	connection.query(sql, function (error, results, fields) {
+		if(error) {
+			console.log('failed to create updateId table.');
+			console.log(error);
+		} else {
+			console.log('updateId table is successfully created.');
+			nconf.set('create_updateId_table', false);
+			nconf.save();
+		}
+	});
+}
