@@ -3,7 +3,9 @@ exports.downloadMedia = function(connection) {
 	var Promise = require("bluebird");
 	var fs = Promise.promisifyAll(require("fs"));
 	var request = require('request');
-	var sql = 'update media set `is_downloaded` = 1 where `media_id_str` = "';
+	var sql = 'update media set `is_downloaded` = 1 where `media_id_str` in ("';
+	var sql2 = '")';
+	var ids = []
 	var promiseDownload = function(url, path, filename, media_id_str, fs, request, connection){
 		return new Promise(function(resolve, reject){
 			var write = fs.createWriteStream(path + '/' + filename);
@@ -13,8 +15,13 @@ exports.downloadMedia = function(connection) {
 				if(res.statusCode!=200) reject();
 			})
 			.pipe(write.on('finish',function(){
+				ids.push(media_id_str);
 				resolve();
-			}));
+			},'error',function(){
+				console.log("ERROR:" + err);
+				reject();
+			}
+			));
 		})
 	  };
 	Nconf.use('file', {
@@ -39,19 +46,17 @@ exports.downloadMedia = function(connection) {
 					}
 				}
 				var promises = [];
+				console.log(user_names);
 				for(user_name in user_names){
 					if(fileId[user_name] == null){
-						promises.push(fs.mkdirAsync(download_path + "/" +　user_names[user_name], (err) => {console.log("54:" + err);}));
+						promises.push(fs.mkdirAsync(download_path + "/" +　user_names[user_name]));
 					}
 					else if(fileId[user_name] != user_names[user_name]){
-						for(var a=0;a<fileId[user_name].length;a++){
-							console.log(fileId[user_name][a]);
-						}
-						console.log(fileId[user_name] < user_names[user_name]?1:fileId[user_name] > user_names[user_name]?2:0);
-						promises.push(fs.renameAsync(download_path + "/" + fileId[user_name], download_path + "/" + user_names[user_name], function (err) {console.log("57:" + err);}));
+						promises.push(fs.renameAsync(download_path + "/" + fileId[user_name], download_path + "/" + user_names[user_name]));
 					}
 				}
-				Promise.all(promises).then(function() {
+				Promise.all(promises).catch(function(err) {console.log("100:" + err);}).then(function() {
+					console.log("Download start!");
 					var promises2 = [];
 					for(data in results){
 						var ext = "";
@@ -74,13 +79,18 @@ exports.downloadMedia = function(connection) {
 						// download(url, path, filename, media_id_str, fs, request, connection);
 					}
 					Promise.all(promises2, {concurrency: 5}).then(function() {
-						// connection.query(
-						// 	sql + media_id_str + '" ',
-						// 	function(error,results,fields) {
-						// 		if(err) console.log(error);
-						// 		else if(global.endFlag) process.exit(0);
-						// 	}
-						// );
+						for(var x=0;x<ids.length;x++){
+							if(x!=0) sql += '","';
+							sql += ids[x];
+						}
+						sql += sql2;
+						connection.query(
+							sql,
+							function(error,results,fields) {
+								if(err) console.log(error);
+								else if(global.endFlag) process.exit(0);
+							}
+						);
 					});
 				});
 			});
